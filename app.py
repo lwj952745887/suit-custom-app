@@ -113,6 +113,7 @@ with st.form("suit_form"):
     ])
     lining_note = st.text_input("里布备注")
     coat_button = st.text_input("纽扣（上衣）")
+    note_coat = st.text_area("注意（上衣）", height=80)  # 新增 注意（上衣）
 
     # 5. 裤子尺寸（inch）
     st.subheader("👖 裤子尺寸（单位：inch）")
@@ -168,6 +169,7 @@ with st.form("suit_form"):
     vest_lapel_width = st.selectbox("驳头宽度", [
         "4c'm", "5c'm", "6c'm", "7c'm", "8c'm", "9c'm", "10c'm", "11c'm", "12c'm", "13c'm"
     ])
+    note_vest = st.text_area("注意（马甲）", height=80)  # 新增 注意（马甲）
 
     # 8. 特殊体型
     st.subheader("📊 特殊体型（可多选）")
@@ -268,3 +270,4 @@ if submitted:
             st.balloons()
         else:
             st.warning("⚠️ 提交成功，但邮件未送达，请检查配置。")
+
