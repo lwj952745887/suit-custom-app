@@ -17,7 +17,7 @@ def send_email(data_dict, image_count=0):
         body = "🆕 新客户西服定制登记\n\n"
         for k, v in data_dict.items():
             if str(v).strip() != "":
-                label = k.replace("(inch)", "（inch）")
+                label = k.replace("(inch)", "（inch）").replace("(cm)", "（cm）")
                 body += f"{label}：{v}\n"
 
         if image_count > 0:
@@ -49,7 +49,11 @@ with st.form("suit_form"):
 
     # 2. 基础需求
     st.subheader("🧩 基础需求")
-    process = st.selectbox(
+    col1, col2, col3 = st.columns(3)
+
+    suit_quantity = col1.text_input("西装数量", placeholder="如：ABC")
+    gender = col2.selectbox("性别", ["男士", "女士"])
+    process = col3.selectbox(
         "工艺要求",
         [
             "精做粘合衬", "高定粘合衬", "半麻衬工艺", "全麻衬工艺", "手工半麻衬", "手工全麻衬",
@@ -57,6 +61,26 @@ with st.form("suit_form"):
             "特殊无里布/半里布", "需要沟通"
         ]
     )
+
+    fabric_code = col1.text_input("面料编号", placeholder="如：纯黑色来料")
+    try_on = col2.selectbox("是否试身", ["直接成品", "试身"])
+    fabric_composition = col3.text_input("面料成份", placeholder="如：羊毛100%")
+
+    fabric_style = col1.selectbox("面料风格", ["纯色", "条纹", "格子", "其他"])
+    customer_name = col2.text_input("客人姓名", placeholder="如：卢宁")
+    height = col3.number_input("身高CM", min_value=140, max_value=220, value=165)
+
+    shop_name = col1.text_input("店铺名称", placeholder="如：亿爵定制")
+    weight = col2.number_input("体重KG", min_value=40, max_value=150, value=77)
+    urgent = col3.selectbox("是否加急", ["否", "是"])
+
+    order_date = col1.date_input("下单日期", value=datetime.now().date())
+    delivery_date = col2.date_input("出货日期", value=datetime.now().date())
+    shirt_fabric = col3.text_input("衬衣面料", placeholder="如：白棉")
+
+    embroidery_content = col1.text_input("绣字内容", placeholder="如：张三")
+    trial_coat_size = col2.text_input("试衣尺码（上衣）", placeholder="如：M / 40")
+    trial_pants_size = col3.text_input("试衣尺码（裤子）", placeholder="如：32 / L")
 
     # 3. 上衣尺寸（inch）
     st.subheader("👕 上衣尺寸（单位：inch）")
@@ -75,7 +99,7 @@ with st.form("suit_form"):
 
     # 4. 上衣版型
     st.subheader("🎨 上衣版型")
-    lapel_eye = st.selectbox("驳头凤眼款式", [
+    lapel_collar = st.selectbox("驳头凤眼款式", [
         "米兰眼", "机器凤眼", "撞色凤眼备注", "米兰眼未来之星", "米兰眼生命之旅", "米兰眼一心一意",
         "米兰眼无边无肯", "米兰眼方方圆圆", "米兰眼心心相印", "米兰眼事事如意", "米兰眼龙角型",
         "弧型米兰眼", "月牙型米兰眼", "机器真开眼", "无驳头凤眼", "真开米兰眼"
@@ -113,7 +137,7 @@ with st.form("suit_form"):
     ])
     lining_note = st.text_input("里布备注")
     coat_button = st.text_input("纽扣（上衣）")
-    note_coat = st.text_area("注意（上衣）", height=80)  # 新增 注意（上衣）
+    note_coat = st.text_area("注意（上衣）", height=80)
 
     # 5. 裤子尺寸（inch）
     st.subheader("👖 裤子尺寸（单位：inch）")
@@ -169,7 +193,7 @@ with st.form("suit_form"):
     vest_lapel_width = st.selectbox("驳头宽度", [
         "4c'm", "5c'm", "6c'm", "7c'm", "8c'm", "9c'm", "10c'm", "11c'm", "12c'm", "13c'm"
     ])
-    note_vest = st.text_area("注意（马甲）", height=80)  # 新增 注意（马甲）
+    note_vest = st.text_area("注意（马甲）", height=80)
 
     # 8. 特殊体型
     st.subheader("📊 特殊体型（可多选）")
@@ -199,7 +223,26 @@ if submitted:
             "姓名": name,
             "手机号": phone,
             "所属门店": store,
+
+            # 基础需求
+            "西装数量": suit_quantity,
+            "性别": gender,
             "工艺要求": process,
+            "面料编号": fabric_code,
+            "是否试身": try_on,
+            "面料成份": fabric_composition,
+            "面料风格": fabric_style,
+            "客人姓名": customer_name,
+            "身高CM": height,
+            "店铺名称": shop_name,
+            "体重KG": weight,
+            "是否加急": urgent,
+            "下单日期": order_date.strftime("%Y-%m-%d"),
+            "出货日期": delivery_date.strftime("%Y-%m-%d"),
+            "衬衣面料": shirt_fabric,
+            "绣字内容": embroidery_content,
+            "试衣尺码（上衣）": trial_coat_size,
+            "试衣尺码（裤子）": trial_pants_size,
 
             # 上衣尺寸（inch）
             "胸围 (inch)": chest,
@@ -215,7 +258,7 @@ if submitted:
             "下摆 (inch)": bottom_hem_coat,
 
             # 上衣版型
-            "驳头凤眼款式": lapel_eye,
+            "驳头凤眼款式": lapel_collar,
             "驳头领型": lapel_style,
             "门襟": front_closure,
             "后叉": back_slit,
@@ -227,6 +270,7 @@ if submitted:
             "袖口": cuff,
             "里布备注": lining_note,
             "纽扣（上衣）": coat_button,
+            "注意（上衣）": note_coat,
 
             # 裤子尺寸（inch）
             "裤腰围 (inch)": waist_pants,
@@ -257,6 +301,7 @@ if submitted:
             "后背（马甲）": vest_back,
             "手巾袋（马甲）": vest_handkerchief,
             "驳头宽度（马甲）": vest_lapel_width,
+            "注意（马甲）": note_vest,
 
             # 特殊体型 & 其他
             "特殊体型": ", ".join(body_features),
@@ -270,4 +315,3 @@ if submitted:
             st.balloons()
         else:
             st.warning("⚠️ 提交成功，但邮件未送达，请检查配置。")
-
