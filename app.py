@@ -44,15 +44,17 @@ with st.form("suit_form"):
     st.subheader("👤 客户信息")
     col1, col2, col3 = st.columns(3)
     name = col1.text_input("姓名 *", max_chars=20)
+    gender = col2.selectbox("性别", ["男士", "女士"])
     phone = col2.text_input("手机号 *", max_chars=11)
     store = col3.text_input("所属门店", value="总部")
+    height = col1.number_input("身高CM", min_value=140, max_value=220, value=170)
+    weight = col2.number_input("体重KG", min_value=40, max_value=150, value=70)
 
     # 2. 基础需求
     st.subheader("🧩 基础需求")
     col1, col2, col3 = st.columns(3)
 
     suit_quantity = col1.text_input("西装数量", placeholder="如：ABC")
-    gender = col2.selectbox("性别", ["男士", "女士"])
     process = col3.selectbox(
         "工艺要求",
         [
@@ -64,23 +66,15 @@ with st.form("suit_form"):
 
     fabric_code = col1.text_input("面料编号", placeholder="如：纯黑色来料")
     try_on = col2.selectbox("是否试身", ["直接成品", "试身"])
-    fabric_composition = col3.text_input("面料成份", placeholder="如：羊毛100%")
-
-    fabric_style = col1.selectbox("面料风格", ["纯色", "条纹", "格子", "其他"])
-    customer_name = col2.text_input("客人姓名", placeholder="如：卢宁")
-    height = col3.number_input("身高CM", min_value=140, max_value=220, value=165)
-
-    shop_name = col1.text_input("店铺名称", placeholder="如：亿爵定制")
-    weight = col2.number_input("体重KG", min_value=40, max_value=150, value=77)
     urgent = col3.selectbox("是否加急", ["否", "是"])
-
     order_date = col1.date_input("下单日期", value=datetime.now().date())
-    delivery_date = col2.date_input("出货日期", value=datetime.now().date())
     shirt_fabric = col3.text_input("衬衣面料", placeholder="如：白棉")
 
-    embroidery_content = col1.text_input("绣字内容", placeholder="如：张三")
-    trial_coat_size = col2.text_input("试衣尺码（上衣）", placeholder="如：M / 40")
-    trial_pants_size = col3.text_input("试衣尺码（裤子）", placeholder="如：32 / L")
+    embroidery_shirt = col1.text_input("绣字（衬衣）", value="无")
+    embroidery_suit = col2.text_input("绣字（西服）", value="无")
+
+    trial_coat_size = col1.text_input("试衣尺码（上衣）", placeholder="如：M / 40")
+    trial_pants_size = col2.text_input("试衣尺码（裤子）", placeholder="如：32 / L")
 
     # 3. 上衣尺寸（inch）
     st.subheader("👕 上衣尺寸（单位：inch）")
@@ -315,3 +309,4 @@ if submitted:
             st.balloons()
         else:
             st.warning("⚠️ 提交成功，但邮件未送达，请检查配置。")
+
